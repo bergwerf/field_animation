@@ -1,0 +1,17 @@
+{
+  "name": "field_animation",
+  "version": "0.0.0",
+  "description": "Vector Field Animation in WebGL",
+  "author": "Herman Bergwerf <post@hbergwerf.nl>",
+  "license": "MIT",
+  "scripts": {
+    "serve": "parcel serve web/index.html --dist-dir .build",
+    "build": "rm -rf dist && parcel build web/index.html --no-content-hash --no-source-maps --dist-dir dist"
+  },
+  "dependencies": {
+    "regl": "^2.1.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  }
+}
