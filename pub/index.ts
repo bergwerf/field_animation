@@ -45,8 +45,9 @@ function to_screen(x: number, size: number, pixel_ratio: number) {
   return Math.min(Math.max(2.0 * pixel_ratio * x / size - 1.0, -0.999), 0.999)
 }
 
-window.addEventListener('mousedown', update_mouse)
-window.addEventListener('mousemove', update_mouse)
+window.addEventListener('pointermove', update_mouse)
+window.addEventListener('pointerdown', update_mouse)
+window.addEventListener('pointerup', update_mouse)
 
 // Particle updating
 const update_particles = regl({
@@ -90,7 +91,7 @@ void main () {
   framebuffer: ({ tick }) => TEXTURES[(tick + 1) % 2],
 
   uniforms: {
-    state: ({ tick }) => TEXTURES[(tick) % 2],
+    state: ({ tick }) => TEXTURES[tick % 2],
     shape_x: regl.context('viewportWidth'),
     shape_y: regl.context('viewportHeight'),
     delta_t: 0.1,
@@ -98,6 +99,8 @@ void main () {
   },
 
   attributes: {
+    // This covers the area [-1,1]^2.
+    // Alternatively one could specify two triangles.
     position: [
       0, -4,
       4, 4,
@@ -105,8 +108,6 @@ void main () {
     ]
   },
   primitive: 'triangles',
-  elements: null,
-  offset: 0,
   count: 3
 })
 
@@ -169,7 +170,7 @@ regl.frame(({ tick, drawingBufferWidth, drawingBufferHeight, pixelRatio }) => {
     }
 
     // Write positions into the particle texture.
-    const framebuffer = TEXTURES[(tick) % 2] as ExtendedFramebuffer2D
+    const framebuffer = TEXTURES[tick % 2] as ExtendedFramebuffer2D
     (framebuffer.color[0] as REGL.Texture2D).subimage(
       BLOCK, COUNT % N, ((COUNT / N) | 0) % N)
 
